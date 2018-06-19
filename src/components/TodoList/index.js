@@ -1,19 +1,20 @@
 import React from 'react'
 
-const TodoList = props => {
+const TodoList = ({todos, removeTodo}) => {
 
-    const items = props.items
-    const itemsList = items.map(
-        (item) => (
-            <li key={item.toString()}>
-                {item}
-            </li>
-        )
-    )
     return (
-        <ul>
-            {itemsList}
-        </ul>
+        <div>
+            {
+                todos.map(
+                    (todo) => (
+                        <p key={todo.id}>
+                            {todo.text}
+                            <input type="button" value="x" onClick={() => removeTodo(todo.id)} />
+                        </p>
+                    )
+                )
+            }
+        </div>
     )
 }
 

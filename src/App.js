@@ -5,7 +5,6 @@ import AddTodoForm from './components/AddTodoForm'
 import TodoList from './components/TodoList'
 
 class App extends React.Component {
-
     state = {
         todoItems: []
 
@@ -15,15 +14,27 @@ class App extends React.Component {
         if (todoText)
             this.setState(
                 {
-                    todoItems: this.state.todoItems.concat(todoText)
+                    todoItems: this.state.todoItems.concat({text: todoText, id: this.generateId()})
                 }
             )
+    }
+
+    generateId = () => {
+        return '_' + Math.random().toString(36).substr(2, 9)
     }
 
     handleClearList = () => {
         this.setState(
             {
                 todoItems: []
+            }
+        )
+    }
+
+    handleTodoDelete = id => {
+        console.log(id);
+        this.setState((prev) => {
+                return {todoItems: prev.todoItems.filter(item => item.id !== id)}
             }
         )
     }
@@ -37,8 +48,8 @@ class App extends React.Component {
                     onTodoAdd={this.handleAdd}
                     onClearList={this.handleClearList}
                 />
-                <TodoList items={this.state.todoItems}
-                          onItemDelete={this.handleItemDelete}
+                <TodoList todos={this.state.todoItems}
+                          removeTodo={this.handleTodoDelete}
                 />
             </div>
         );
