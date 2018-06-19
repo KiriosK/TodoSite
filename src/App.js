@@ -1,31 +1,21 @@
-import React, {Component} from 'react'
+import React from 'react'
 
 import './App.css';
-import AddTodoForm from './containers/AddTodoForm'
-import TodoList from './containers/TodoList'
+import AddTodoForm from './components/AddTodoForm'
+import TodoList from './components/TodoList'
 
-class App extends Component {
+class App extends React.Component {
 
     state = {
-        inputText: '',
         todoItems: []
 
     }
 
-    handleInputText = (todo) => {
-        this.setState(
-            {
-                inputText: todo
-            }
-        )
-    }
-
-    handleAdd = () => {
-        if (this.state.inputText !== '')
+    handleAdd = (todoText) => {
+        if (todoText)
             this.setState(
                 {
-                    inputText: '',
-                    todoItems: this.state.todoItems.concat(this.state.inputText)
+                    todoItems: this.state.todoItems.concat(todoText)
                 }
             )
     }
@@ -44,11 +34,12 @@ class App extends Component {
                 <h1>TODO List:</h1>
                 <AddTodoForm
                     inputText={this.state.inputText}
-                    onInputChange={this.handleInputText}
-                    onAddClick={this.handleAdd}
-                    onClearClick={this.handleClearList}
+                    onTodoAdd={this.handleAdd}
+                    onClearList={this.handleClearList}
                 />
-                <TodoList items={this.state.todoItems}/>
+                <TodoList items={this.state.todoItems}
+                          onItemDelete={this.handleItemDelete}
+                />
             </div>
         );
     }
