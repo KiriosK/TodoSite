@@ -1,59 +1,67 @@
 import React from 'react'
+import nanoid from 'nanoid'
+import styled from 'styled-components'
 
 import './App.css';
-import AddTodoForm from './components/AddTodoForm'
-import TodoList from './components/TodoList'
+import { TodoForm } from './components/TodoForm'
+import { TodoList } from './components/TodoList'
 
+const StyledApp = styled.div`
+	display: flex;
+  	flex-flow: column;
+ 	justify-content: center;
+	align-items: center;
+	background-color: #fffbe6;
+`;
 class App extends React.Component {
-    state = {
-        todoItems: []
+	state = {
+		todos: []
+	}
 
-    }
+	handleAddTodo = (todoText) => {
+		if (todoText)
+			this.setState({
+				todos: this.state.todos.concat({ text: todoText, id: nanoid(), checked: false })
+			})
+	}
 
-    handleAdd = (todoText) => {
-        if (todoText)
-            this.setState(
-                {
-                    todoItems: this.state.todoItems.concat({text: todoText, id: this.generateId()})
-                }
-            )
-    }
+	handleClearList = () => {
+		this.setState({
+			todos: []
+		})
+	}
 
-    generateId = () => {
-        return '_' + Math.random().toString(36).substr(2, 9)
-    }
+	handleCheckTodo = id => {
+		this.setState((prev) => ({
+			todos: prev.todos.map(todo =>
+				todo.id === id
+					? { ...todo, checked: !todo.checked }
+					: todo
+			)
+		}))
+	}
 
-    handleClearList = () => {
-        this.setState(
-            {
-                todoItems: []
-            }
-        )
-    }
+	handleDeleteTodo = id => {
+		this.setState((prev) => {
+			return { todos: prev.todos.filter(todo => todo.id !== id) }
+		})
+	}
 
-    handleTodoDelete = id => {
-        console.log(id);
-        this.setState((prev) => {
-                return {todoItems: prev.todoItems.filter(item => item.id !== id)}
-            }
-        )
-    }
-
-    render() {
-        return (
-            <div className="App">
-                <h1>TODO List:</h1>
-                <AddTodoForm
-                    inputText={this.state.inputText}
-                    onTodoAdd={this.handleAdd}
-                    onClearList={this.handleClearList}
-                />
-                <TodoList todos={this.state.todoItems}
-                          removeTodo={this.handleTodoDelete}
-                />
-            </div>
-        );
-    }
+	render() {
+		return (
+			<StyledApp>
+				<TodoForm
+					addTodo={this.handleAddTodo}
+					clearList={this.handleClearList}
+				/>
+				<TodoList
+					todos={this.state.todos}
+					checkTodo={this.handleCheckTodo}
+					removeTodo={this.handleDeleteTodo}
+				/>
+			</StyledApp >
+		)
+	}
 }
 
 export default App
