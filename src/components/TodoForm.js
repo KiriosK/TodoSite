@@ -8,6 +8,9 @@ const StyledForm = styled.div`
     align-items: stretch;
     margin-bottom: 1rem;    
     width: 60%;
+    @media (max-width: 470px) {
+        width: 100%
+    }
 `
 
 const ButtonWrapper = styled.div`
@@ -16,11 +19,7 @@ const ButtonWrapper = styled.div`
     justify-content: stretch;    
 `
 
-const StyledInput = styled.input.attrs({
-    type: "text",
-    maxLength: "130",
-    placeholder: "Type todo text up to 130 symbols."
-})`
+const StyledInput = styled.input`
     text-align: left;
     border: 1px solid #cecece;
     outline: none;
@@ -66,6 +65,11 @@ export class TodoForm extends React.Component {
         )
     }
 
+    handleEnterPress = (e) => {
+        if (e.key === 'Enter')
+            this.handleAddClick(e)
+    }
+
     handleAddClick = (e) => {
         this.props.addTodo(this.state.inputText)
         this.setState(
@@ -80,7 +84,13 @@ export class TodoForm extends React.Component {
         return (
             <StyledForm>
                 <h1>TODO List:</h1>
-                <StyledInput value={this.state.inputText} onChange={this.handleInputChange} />
+                <StyledInput
+                    type="text"
+                    placeholder="Type todo text here and click enter or Add"
+                    onKeyPress={this.handleEnterPress}
+                    value={this.state.inputText}
+                    onChange={this.handleInputChange}
+                />
                 <ButtonWrapper>
                     <AddButton onClick={this.handleAddClick}>Add</AddButton>
                     <ClearButton onClick={() => clearList()}>Clear List</ClearButton>

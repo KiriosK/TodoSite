@@ -10,11 +10,14 @@ const List = styled.div`
     align-items: stretch;    
     padding: 1rem;
     width: 60%;
+    @media (max-width: 470px) {
+        width: 100%
+    }
 `
 const DeleteButton = styled.button`
     align-self: flex-end;
     outline: none;
-    margin: 0 .5rem;
+    margin: 0 .1rem .1rem 0;
     padding: 1em;
     background-color: #EFEEEE;
     font-size: 15px;
